@@ -91,6 +91,7 @@ crowded.
 
   Audit log               Action, actor, target   Filter and inspect
                           and timestamp           
+  | Grouping review queue | AI-suggested related reports, confidence scores and review status | Review, confirm or reject suggested groupings |
   -----------------------------------------------------------------------
 
 ## 4. Authority dashboard layout
@@ -113,8 +114,48 @@ actions and status controls.
 
 AI suggestions should be visually distinguished from authority-confirmed
 values.
+## 6. Incident Group Management
 
-## 6. Tracking page privacy
+The authority interface shall provide a dedicated way to review and manage incident groups.
+
+### Group review
+
+- Display the Incident Group ID and its current status.
+- Show the reports currently associated with the group.
+- Display AI-suggested related reports with their similarity or confidence scores, where available.
+- Provide an authority review queue for uncertain grouping suggestions.
+- Allow authorized authorities to confirm or reject suggested groupings.
+
+### Group membership correction
+
+- Allow authorized authorities to add, remove or move reports between groups.
+- Require confirmation before applying membership changes.
+- Allow authorities to provide a reason for manual membership corrections.
+- Display the previous and updated group associations in the membership history.
+- Restrict exceptional membership corrections to administrators.
+
+### Status management
+
+- Display the incident-group status separately from individual report statuses.
+- Allow authorized authorities to update group and individual report statuses independently.
+- Clearly communicate which status is being changed.
+## 7. AI Processing States
+
+The authority interface shall communicate the processing state of each report.
+
+- **Pending:** AI analysis is waiting to begin.
+- **Processing:** AI analysis is currently running.
+- **Completed:** AI analysis has finished and results are available.
+- **Failed:** AI analysis could not be completed.
+
+The interface shall:
+
+- Display AI processing status separately from report and group statuses.
+- Show available AI-generated classification, severity and priority results.
+- Clearly distinguish AI recommendations from authority-confirmed decisions.
+- Display an appropriate message when AI results are unavailable.
+- Provide an option for authorized authorities to request AI re-analysis.
+## 8. Tracking page privacy
 
 The citizen tracking page must: - Require Report ID and secret token. -
 Show only the current status of that report. - Avoid displaying other
@@ -122,7 +163,7 @@ group members' submissions. - Avoid exposing internal notes, authority
 identities or private contact details. - Use a generic error for invalid
 credentials.
 
-## 7. Map interaction
+## 9. Map interaction
 
 -   Use Leaflet.
 -   Provide useful filters.
@@ -132,7 +173,7 @@ credentials.
 -   The current baseline places the incident map inside the protected
     authority experience. A public map is not assumed.
 
-## 8. Usability and accessibility
+## 10. Usability and accessibility
 
 -   Use clear field labels and validation messages.
 -   Maintain sufficient contrast.
@@ -142,3 +183,9 @@ credentials.
 -   Provide loading, empty, success and error states.
 -   Confirm consequential actions such as status changes or resource
     approvals.
+- Provide loading indicators during data retrieval and processing.
+- Display meaningful empty states when no reports or groups match the selected filters.
+- Provide clear error messages when an operation fails.
+- Display confirmation messages after successful actions.
+- Ask for confirmation before consequential actions such as changing statuses or modifying group membership.
+- Prevent duplicate submissions when a submission is already being processed.

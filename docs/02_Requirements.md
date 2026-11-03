@@ -76,6 +76,13 @@ The backend---not merely the frontend---must enforce permissions.
                                       The backend shall enforce
                                       permissions for protected
                                       operations.
+                                      ### Role-Based Access Permissions
+
+| Role | Group Membership Permissions |
+|---|---|
+| Citizen | Cannot modify incident group membership. |
+| Authority | Can review suggested groupings and correct group membership by adding, removing or moving reports between groups. |
+| Administrator | Can handle exceptional group membership corrections. |
   -----------------------------------------------------------------------
 
 ### Citizen reporting and validation
@@ -125,23 +132,51 @@ The backend---not merely the frontend---must enforce permissions.
                                       defined urgency factors and a
                                       reproducible scoring method.
 
-  FR-10                               The system shall identify
-                                      potentially related or duplicate
-                                      reports for grouping and authority
-                                      review.
+ FR-10: Duplicate Incident Detection and Grouping
+
+The system shall identify potentially related incident reports using their descriptions, geographical locations, categories and other relevant information.
+
+- The system shall calculate a similarity or confidence score for potentially related reports.
+- High-confidence matches shall be eligible for automatic grouping according to predefined similarity thresholds and grouping rules.
+- Matches with uncertain confidence shall be submitted to an authority for manual review.
+- Authorized authorities shall be able to review suggested groupings and correct group membership by adding, removing or moving reports between groups.
+- Administrators shall be able to handle exceptional group membership corrections.
+- Grouping shall never result in the deletion of individual incident reports.
+- Each incident report shall retain its individual status, while its incident group shall maintain a separate group-level status.
+- The system shall maintain current group membership and a historical record of membership changes.
+- Membership history shall include the affected report, previous group ID, new group ID, action performed, actor, timestamp and reason.
+- The system shall prevent unauthorized group membership modifications.
+- All membership changes shall be recorded in the audit history.
+**Acceptance Criteria:**
+
+1. High-confidence related reports can be automatically assigned to an existing incident group.
+2. Uncertain matches are displayed in the authority review queue.
+3. Authorities can confirm suggested groupings.
+4. Authorized authorities can add, remove or move reports between groups.
+5. Administrators can perform exceptional membership corrections.
+6. Previous group membership information remains available after a correction.
+7. Individual reports remain independently accessible after grouping.
+8. Individual report statuses and group statuses are maintained separately.
+9. Unauthorized users cannot modify incident group membership.
+10. Every membership change is recorded with the actor, timestamp and reason.
 
   FR-15                               The system shall allow authorized
                                       authorities to correct AI
                                       predictions and save feedback for
                                       model evaluation.
 
-  FR-17                               After a valid report is saved, the
-                                      system shall automatically initiate
-                                      AI analysis for classification,
-                                      severity estimation, priority
-                                      scoring and related-report
-                                      detection.
+FR-17: Hybrid AI Processing
 
+After a valid incident report is successfully saved, the system shall initiate a hybrid AI processing workflow consisting of immediate processing and background processing.
+
+- The system shall immediately acknowledge successful report submission and generate a unique report reference ID.
+- Basic report validation and data persistence shall be completed before background AI processing begins.
+- AI-based classification, severity estimation, priority scoring and related-report detection shall be performed through background processing where appropriate.
+- The system shall maintain a processing status for AI tasks, including Pending, Processing, Completed and Failed.
+- Authorities shall be able to view the processing status and available AI-generated results through the authority dashboard.
+- The system shall allow failed background processing tasks to be logged and retried according to predefined retry policies.
+- Failure of an AI processing task shall not result in the loss of the submitted incident report.
+- The system shall make AI-generated predictions and recommendations available for human review before they are treated as confirmed operational decisions.
   FR-18                               The system shall allow authorized
                                       authorities to request AI
                                       re-analysis when appropriate.
@@ -151,6 +186,7 @@ The backend---not merely the frontend---must enforce permissions.
                                       report, record the AI processing
                                       state and allow a retry. AI failure
                                       shall not invalidate the report.
+  
   -----------------------------------------------------------------------
 
 ### Dashboard, analytics and status tracking
@@ -188,10 +224,15 @@ The backend---not merely the frontend---must enforce permissions.
                                       individual report statuses
                                       independently.
 
-  FR-25                               The system shall record important
-                                      status changes and administrative
-                                      actions in an audit log.
-  -----------------------------------------------------------------------
+FR-25: Audit Log Review
+
+The system shall allow authorized authorities and administrators to review relevant audit records according to their access permissions.
+
+- Authorized users shall be able to view audit records related to incident reports and incident groups.
+- Administrators shall be able to review administrative audit records.
+- Audit records shall support filtering by actor, action type, affected resource and timestamp.
+- Citizens shall not have access to internal audit logs.
+- Reviewing audit records shall not allow users to modify or delete them.  -----------------------------------------------------------------------
 
 ### Related-report grouping
 
@@ -220,11 +261,17 @@ The backend---not merely the frontend---must enforce permissions.
                                       resources and review suggested
                                       resource allocations.
 
-  FR-14                               The system shall record important
-                                      status changes and administrative
-                                      actions with an actor and
-                                      timestamp.
+ FR-14: Audit Trail
 
+The system shall maintain an audit log of important system activities, including incident status changes, group status changes, group membership modifications and administrative actions.
+
+- Each audit log entry shall record the actor responsible for the action.
+- Each entry shall include the action performed and its timestamp.
+- Each entry shall identify the affected report, incident group or system resource, wherever applicable.
+- Each entry shall include relevant details about the change, including the previous and updated values wherever applicable.
+- Group membership modifications shall include the reason for the change.
+- Audit records shall be protected against unauthorized modification or deletion.
+- Access to audit records shall be restricted to authorized users.
   FR-26                               Authorized personnel shall review
                                       and approve resource suggestions
                                       before they are treated as
@@ -236,61 +283,21 @@ covers the general audit capability; FR-25 emphasizes status-change
 auditing. They can be consolidated during implementation planning if a
 single audit requirement is preferred.
 
-## 5. Non-functional requirements
+## 5. Non-Functional Requirements
 
-  -----------------------------------------------------------------------
-  ID                                  Requirement
-  ----------------------------------- -----------------------------------
-  NFR-01 Security                     Passwords shall be stored using a
-                                      suitable password-hashing
-                                      algorithm. Protected APIs shall
-                                      require authentication and
-                                      authorization.
-
-  NFR-02 Data integrity               Each report shall retain a stable
-                                      unique identifier. Grouping shall
-                                      not delete or overwrite original
-                                      submissions.
-
-  NFR-03 Reliability                  A valid report shall remain saved
-                                      even if AI processing or an
-                                      external dependency fails.
-
-  NFR-04 Performance                  Common dashboard and report
-                                      operations should complete within a
-                                      reasonable target established
-                                      during testing.
-
-  NFR-05 Usability                    Citizen submission and report
-                                      tracking shall be understandable
-                                      with clear validation and error
-                                      messages.
-
-  NFR-06 Maintainability              Frontend, backend, database access
-                                      and AI processing shall be
-                                      separated into maintainable
-                                      modules/services.
-
-  NFR-07 Auditability                 Important administrative and
-                                      status-changing actions shall be
-                                      traceable to an authorized actor
-                                      and timestamp.
-
-  NFR-08 Privacy                      Public-facing responses shall not
-                                      expose private citizen information
-                                      or another citizen's report
-                                      details.
-
-  NFR-09 Accessibility                Interfaces should use readable
-                                      contrast, labels,
-                                      keyboard-accessible controls and
-                                      responsive layouts.
-
-  NFR-10 AI evaluation                AI performance shall be evaluated
-                                      using appropriate test data and
-                                      documented metrics; model output
-                                      shall remain advisory.
-  -----------------------------------------------------------------------
+| ID | Category | Requirement |
+|---|---|---|
+| NFR-01 | Security | User passwords shall be stored using a suitable secure password-hashing algorithm. Protected APIs shall require authentication and authorization. Role-based permissions shall be enforced by the backend for all protected operations. |
+| NFR-02 | Data Integrity | Each incident report shall retain a stable, unique identifier. Grouping, status updates and membership corrections shall not delete or overwrite the original report submission. Changes to important records shall preserve relevant historical information. |
+| NFR-03 | Reliability | A valid incident report shall remain saved even if AI processing or an external dependency fails. Background processing failures shall be logged, and eligible tasks shall support retries without creating duplicate reports or losing submitted data. |
+| NFR-04 | Performance | Common operations, including report submission, dashboard loading, filtering and report viewing, shall meet performance targets established and documented during testing under a defined test workload. Background AI processing shall not unnecessarily delay report submission acknowledgement. |
+| NFR-05 | Usability | Citizen report submission and report tracking shall be understandable and straightforward. The system shall provide clear instructions, input validation, confirmation messages and meaningful error messages. Authority dashboard operations shall present incident information and available actions clearly. |
+| NFR-06 | Maintainability | The frontend, backend, database access and AI processing components shall be organized into modular, maintainable components or services. The project shall maintain appropriate technical documentation to support future development and troubleshooting. |
+| NFR-07 | Auditability | Important administrative actions, report status changes, group status changes and group membership modifications shall be traceable through audit records. Records shall include the responsible actor, action, timestamp, affected resource and relevant change details wherever applicable. Audit records shall be protected against unauthorized modification or deletion. |
+| NFR-08 | Privacy | Public-facing interfaces and responses shall not expose private citizen information, internal authority data, audit records or another citizen's private report details. Public report tracking shall expose only information permitted for public access. The system shall collect and display only the information necessary for its intended functions. |
+| NFR-09 | Accessibility | Interfaces shall use readable text, sufficient color contrast, descriptive labels, visible keyboard focus indicators and keyboard-accessible controls. Layouts shall adapt to commonly used desktop, tablet and mobile screen sizes. |
+| NFR-10 | AI Evaluation | AI components shall be evaluated using appropriate test datasets and documented evaluation metrics. Classification, severity estimation, priority scoring and duplicate detection shall be assessed using metrics suitable for each task. AI-generated results shall remain advisory and shall not independently replace authorized human decisions. |
+| NFR-11 | Backup and Recovery | The system shall support appropriate database backup and recovery procedures to reduce the risk of permanent data loss. Backup and recovery procedures shall be documented and periodically tested during development and maintenance. |-----------------------------------------------------------------------
 
 ## 6. Status model
 
