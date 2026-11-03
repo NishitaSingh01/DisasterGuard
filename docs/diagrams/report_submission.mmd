@@ -1,0 +1,10 @@
+flowchart TD
+    A[Citizen submits report] --> B[Validate]
+    B --> C{Valid?}
+    C -->|No| D[Return validation error]
+    C -->|Yes| E[Save report]
+    E --> F[Generate Report ID and secret token]
+    E --> G[Start AI processing]
+    G --> H[Classification, severity, priority, related-report analysis]
+    H --> I[Save analysis result]
+    I --> J[Authority review]

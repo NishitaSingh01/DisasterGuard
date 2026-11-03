@@ -1,0 +1,6 @@
+flowchart TD
+    A[Citizen enters Report ID and secret token] --> B[Verify token hash]
+    B --> C{Valid?}
+    C -->|No| D[Generic access error]
+    C -->|Yes| E[Return permitted report fields]
+    E --> F[Display current individual report status]
