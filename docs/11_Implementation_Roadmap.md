@@ -6,7 +6,7 @@ This roadmap proposes a safe implementation order after the design
 documents are reviewed. It is not a claim that any phase has already
 been completed.
 
-## 2. Suggested phases
+## 2. Implementation phases
 
 ### Phase 0 --- Documentation and design approval
 
@@ -199,51 +199,71 @@ been completed.
 - Prepare the final project report and demonstration.
 
 **Exit condition:** All required application components are deployed or prepared for the intended demonstration environment, deployment procedures are documented, and the complete system passes final verification.
-## 3. Suggested implementation priority
+## 3. Implementation Priority
 
-Build the reliable reporting and tracking foundation before AI
-sophistication. A saved report must remain available even when AI is
-unavailable.
+Build the reliable reporting and tracking foundation before introducing advanced AI capabilities. A successfully saved report must remain available even when AI services are unavailable.
 
-Recommended order: 1. Data model and backend foundation. 2. Public
-reporting and secure tracking. 3. Authentication and authority
-dashboard. 4. Map and filtering. 5. AI processing. 6. Grouping and dual
-statuses. 7. Resources and analytics refinements. 8. Testing and
-deployment.
+Recommended priority order:
 
-## 4. Risk register
+1. Data model and backend foundation.
+2. Authentication and access control.
+3. Public reporting and secure tracking.
+4. Authority dashboard and interactive map.
+5. Background AI processing and analysis.
+6. Related-report detection, incident grouping and independent statuses.
+7. Resource allocation assistance and analytics refinements.
+8. Security testing, quality assurance and deployment.
 
-  -----------------------------------------------------------------------
-  Risk                    Impact                  Mitigation
-  ----------------------- ----------------------- -----------------------
-  AI service unavailable  AI analysis delayed     Persist reports first;
-                                                  retry analysis
+The implementation order may be adjusted when necessary, provided that system dependencies, security requirements and data integrity are maintained.
 
-  False report grouping   Incorrect operational   Human review and
-                          view                    correction
+**Important:** Report persistence must be established before AI processing is introduced. AI service failures must never result in the loss of submitted reports.
+## 4. Risk Register
 
-  False AI classification Misleading suggestion   Display uncertainty;
-                                                  authority review
+| Risk | Potential Impact | Mitigation Strategy |
+|---|---|---|
+| AI service unavailable | AI analysis delayed or unavailable | Persist reports before AI processing; maintain AI processing states and retry failed analysis. |
+| Background job or queue failure | Reports remain unprocessed | Monitor job status, log failures, and implement retry mechanisms. Ensure report data remains safely stored. |
+| False report grouping | Incorrect incident relationships and operational confusion | Use confidence thresholds, authority review for uncertain matches, and allow authorized corrections. |
+| False AI classification | Misleading classification or severity suggestions | Display confidence and uncertainty; require authority review before operational decisions. |
+| Tracking token exposure | Unauthorized access to citizen tracking information | Store tokens as secure hashes, use HTTPS, rate-limit tracking requests, and never log raw tokens. |
+| Invalid location data | Incorrect map placement | Validate geographic coordinates on the server and handle missing or invalid location data. |
+| Database failure or data loss | Loss of submitted reports and system disruption | Use database backups, appropriate access controls, error handling, and recovery procedures. |
+| Unauthorized access or modifications | Compromised data and loss of trust | Enforce authentication, role-based access control, server-side authorization, and audit logging. |
+| Incorrect resource recommendations | Inefficient or inappropriate resource allocation | Treat recommendations as advisory and require authorized human approval before allocation. |
+| Poor AI dataset | Weak model performance and unreliable predictions | Evaluate using appropriate metrics, use representative test data, and document model limitations. |
+| Scope expansion | Delayed completion and increased complexity | Follow the approved project scope, prioritize essential features, and document future enhancements separately. |
 
-  Tracking token exposure Unauthorized status     Hash tokens, rate-limit
-                          access                  and avoid logging
+## 5. Definition of Done
 
-  Invalid location data   Incorrect map placement Server-side coordinate
-                                                  validation
+### 5.1 Feature-Level Definition of Done
 
-  Scope expansion         Delayed completion      Enforce project
-                                                  exclusions
+A feature is considered complete only when:
 
-  Poor AI dataset         Weak model quality      Evaluate honestly and
-                                                  document limitations
+- Its approved functional requirements are implemented.
+- Input validation and appropriate error states are handled.
+- Authentication and backend authorization are applied where required.
+- Relevant unit, integration, or end-to-end tests pass.
+- Data integrity and security requirements are maintained.
+- User-facing behaviour is understandable and usable.
+- Relevant documentation is updated.
+- The feature has been reviewed and verified against its acceptance criteria.
 
-  Unauthorized status     Loss of trust/data      RBAC and audit logging
-  changes                 integrity               
-  -----------------------------------------------------------------------
+### 5.2 Project-Level Definition of Done
 
-## 5. Definition of done
+DisasterGuard is considered complete when:
 
-A feature is complete only when: - Its requirements are implemented. -
-Validation and error states are handled. - Backend authorization is
-applied where needed. - Relevant tests pass. - User-facing behaviour is
-understandable. - Documentation is updated.
+- All approved core functional requirements are implemented.
+- Citizens can submit reports and securely track their submissions.
+- Authorities can authenticate, review, filter, and manage reports.
+- The interactive disaster map displays report information correctly.
+- AI classification, severity estimation, and priority scoring work as advisory features.
+- Background AI processing supports appropriate failure handling and retries.
+- Related-report detection and incident grouping work with confidence-based review and authority corrections.
+- Individual report statuses and incident group statuses are maintained independently.
+- Group membership history and important administrative actions are recorded in the audit log.
+- Resource allocation recommendations require authorized human approval.
+- Security, privacy, and role-based access controls are verified.
+- Critical test cases pass and no unresolved critical defects remain.
+- AI evaluation results, limitations, and known system constraints are documented.
+- Deployment or demonstration setup instructions are available.
+- Final project documentation is reviewed and updated.
