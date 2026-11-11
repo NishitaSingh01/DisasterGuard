@@ -272,11 +272,17 @@ The system shall maintain an audit log of important system activities, including
 - Group membership modifications shall include the reason for the change.
 - Audit records shall be protected against unauthorized modification or deletion.
 - Access to audit records shall be restricted to authorized users.
-  FR-26                               Authorized personnel shall review
+
+
+FR-26                               Authorized personnel shall review
                                       and approve resource suggestions
                                       before they are treated as
                                       decisions.
-  -----------------------------------------------------------------------
+
+
+
+
+-----------------------------------------------------------------------
 
 **Note:** FR-14 and FR-25 overlap by design in this baseline. FR-14
 covers the general audit capability; FR-25 emphasizes status-change

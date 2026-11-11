@@ -17,6 +17,10 @@ unauthorized changes and maintain the integrity of reports.
 -   Provide logout and account-disable behaviour.
 -   Public citizens do not need accounts for report submission or
     tracking.
+- Apply rate limiting or temporary protection against repeated failed login attempts.
+- Expire inactive sessions after a defined period.
+- Invalidate sessions or tokens after logout.
+- Protect authentication credentials and session tokens during transmission.
 
 ## 3. Role-based access control
 
@@ -34,12 +38,19 @@ unauthorized changes and maintain the integrity of reports.
 -   Update statuses.
 -   Review AI outputs and resource suggestions.
 -   Access only functions granted by the assigned role.
+- Review uncertain incident-group suggestions.
+- Confirm or reject suggested groupings.
+- Correct normal group membership issues by adding, removing or moving reports between groups.
+- Provide a reason when making manual group membership corrections.
+- View relevant group membership history.
 
 ### Administrator
 
--   Manage authorized accounts and roles.
--   Review audit logs.
--   Perform administrative configuration and oversight.
+- Manage authorized authority accounts and roles.
+- Review audit logs, including administrative records.
+- Perform administrative configuration and oversight.
+- Handle exceptional incident-group membership corrections.
+- Review and manage permissions for authority accounts.
 
 Every protected API operation must enforce permissions on the backend.
 Hiding a button in the frontend is not sufficient.
@@ -78,6 +89,8 @@ Hiding a button in the frontend is not sufficient.
     through public tracking.
 -   Keep public responses separate from authority responses.
 -   Define data retention and deletion policies before deployment.
+- Public tracking responses shall expose only information explicitly approved for citizen access.
+- Internal group information, other citizens' reports, authority notes and administrative data shall never be exposed through public tracking.
 
 ## 7. API and infrastructure security
 
@@ -91,16 +104,36 @@ Hiding a button in the frontend is not sufficient.
 -   Keep dependencies updated and review vulnerabilities.
 -   Use least-privilege database credentials.
 
-## 8. Audit logging
+## 8. Audit Logging
 
-Record important events such as: - Authority login/logout events where
-appropriate. - Report status changes. - Incident-group status changes. -
-Group membership corrections. - AI feedback/re-analysis requests. -
-Resource approvals/rejections. - Account and role changes.
+The system shall maintain secure audit records for important security, administrative and operational activities.
 
-Each audit event should identify the actor (where authenticated),
-action, target and timestamp. Do not store passwords, raw tracking
-tokens or unnecessary sensitive payloads in logs.
+The audit log shall cover:
+
+- Authority login and logout events, where appropriate.
+- Individual report status changes.
+- Incident-group status changes.
+- Incident-group membership additions, removals and transfers.
+- AI feedback and re-analysis requests.
+- Resource approval and rejection actions.
+- Authority account and role changes.
+- Administrative configuration changes.
+
+Each audit event shall record:
+
+- The actor responsible for the action, where authenticated.
+- The action performed.
+- The affected report, incident group or system resource.
+- The timestamp of the action.
+- Previous and updated values, wherever applicable.
+- The reason for the action, wherever required.
+
+Additional security requirements:
+
+- Audit records shall be protected against unauthorized modification or deletion.
+- Access to audit records shall be restricted according to user roles.
+- Passwords, raw tracking tokens and unnecessary sensitive information shall never be stored in audit logs.
+- Group membership changes shall retain their historical records.
 
 ## 9. AI safety and human oversight
 
