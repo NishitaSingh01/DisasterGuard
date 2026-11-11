@@ -41,7 +41,10 @@ Resource suggestion review.
 -   Malformed request payloads.
 -   Unsafe or oversized uploads.
 -   Role escalation attempts.
-
+- Verify that public tracking never exposes another citizen's report.
+- Verify that internal authority notes and incident-group information are not exposed through public tracking.
+- Verify that tracking credentials are not exposed in application logs or error responses.
+- Verify that citizen-facing responses contain only permitted report information.
 ### Usability testing
 
 -   Can a citizen understand the form?
@@ -111,6 +114,23 @@ Resource suggestion review.
                           classification                  report is not
                                                           automatically
                                                           deprioritized
+| TC-19 | High-confidence related reports | Eligible reports are automatically assigned to the appropriate incident group according to configured rules |
+| TC-20 | Low-confidence related reports | Suggestions appear in the authority review queue and are not automatically confirmed |
+| TC-21 | Authority corrects group membership | Report is added, removed or moved successfully by an authorized authority |
+| TC-22 | Administrator performs exceptional correction | Exceptional membership correction is permitted and recorded |
+| TC-23 | Group membership is modified | Previous membership, new membership, actor, timestamp and reason are retained |
+| TC-24 | Unauthorized user attempts group modification | Request is rejected |
+| TC-25 | Group membership is corrected | Original individual reports remain accessible and unchanged |
+| TC-26 | AI job is initiated after report submission | Report is saved and AI processing is initiated |
+| TC-27 | AI job is waiting to execute | Processing state is Pending |
+| TC-28 | AI job begins execution | Processing state changes to Processing |
+| TC-29 | AI job completes successfully | Processing state changes to Completed and results are linked to the correct report |
+| TC-30 | AI job fails | Processing state changes to Failed and the report remains saved |
+| TC-31 | Failed AI job is retried | Retry is recorded and the processing state is updated appropriately |
+| TC-32 | Group membership changes | Audit record includes actor, affected report, previous and new group, timestamp and reason |
+| TC-33 | Administrative action is performed | Action is recorded with the responsible administrator and timestamp |
+| TC-34 | Unauthorized user attempts to access audit logs | Access is denied |
+| TC-35 | User attempts to modify audit records | Modification is rejected |
   -------------------------------------------------------------------------------
 
 ## 4. AI evaluation
@@ -172,3 +192,10 @@ humans. Do not claim perfect duplicate detection.
 -   Group and individual statuses remain independent.
 -   Audit events are recorded for important actions.
 -   AI limitations are documented in the interface and project report.
+- High-confidence and uncertain incident-group suggestions follow their respective workflows.
+- Manual group membership corrections preserve membership history.
+- Group and individual report statuses remain independent.
+- AI processing states are correctly maintained.
+- Failed AI jobs can be retried without losing submitted reports.
+- Unauthorized group modifications and audit-log access are prevented.
+- Citizen tracking does not expose internal or other citizens' information.
